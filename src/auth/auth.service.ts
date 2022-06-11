@@ -1,13 +1,18 @@
 import { ForbiddenException, Injectable } from '@nestjs/common'
-import { User } from '@prisma/client'
 import { PrismaService } from 'src/modules/prisma/prisma.service'
 import * as argon from 'argon2'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime'
 import { AuthCreateDto, AuthInputDto } from './dto'
+import { JwtService } from '@nestjs/jwt'
+import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService) {
+  constructor(
+    private prisma: PrismaService,
+    private jwt: JwtService,
+    private config: ConfigService
+  ) {
     /*
     NOTE: I decided against this,
      as there was no way to check if pass was modified, 
@@ -34,13 +39,13 @@ export class AuthService {
         email: input.email,
       }
     })
-    if(!user) throw new ForbiddenException('Wrong Credentials')
+    if (!user) throw new ForbiddenException('Wrong Credentials')
     const passMatch = await argon.verify(user.pass, input.pass)
-    if(!passMatch) throw new ForbiddenException('Wrong Credentials') 
+    if (!passMatch) throw new ForbiddenException('Wrong Credentials')
 
     // Remove the pass from object.
     delete user.pass
-    return user
+    return await this.signToken(user.id, user.email)
   }
 
   async signUp(input: AuthCreateDto) {
@@ -64,7 +69,31 @@ export class AuthService {
           throw new ForbiddenException('Email or Username taken')
         }
       }
-    throw error
+      throw error
+    }
+  }
+
+  async signToken(userId: number, email: string): 
+  Promise<{ accessToken: string, refreshToken: string }> {
+    const accessToken = await this.jwt.signAsync({
+      id: userId,
+      email
+    }, {
+      expiresIn: '15m',
+      secret: this.config.get('JWT_SECRET')
+    })
+
+    const refreshToken = await this.jwt.signAsync({
+      id: userId,
+      email
+    }, {
+      expiresIn: '30d',
+      secret: this.config.get('JWT_SECRET')
+    })
+
+    return {
+      accessToken: accessToken,
+      refreshToken: refreshToken
     }
   }
 }
