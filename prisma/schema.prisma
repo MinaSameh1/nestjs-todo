@@ -15,14 +15,14 @@ model User {
   email String @unique
   pass  String
 
-  userName String @unique
-
   firstName String
   lastName  String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   ToDo      ToDo[]
+
+  @@map("users")
 }
 
 model ToDo {
@@ -36,4 +36,6 @@ model ToDo {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("bookmarks")
 }

@@ -1,12 +1,21 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
-import { TodoModule } from './todo/todo.module';
-import { PrismaModule } from './prisma/prisma.module';
-import { LoggerMiddleware } from './Middleware/logger.middleware';
+import { UserModule } from './modules/user/user.module';
+import { TodoModule } from './modules/todo/todo.module';
+import { PrismaModule } from './modules/prisma/prisma.module';
+import { LoggerMiddleware } from './common/Middlware/logger.middleware';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [AuthModule, UserModule, TodoModule, PrismaModule]
+  imports: [
+    AuthModule,
+    UserModule,
+    TodoModule,
+    PrismaModule,
+    ConfigModule.forRoot({
+      isGlobal: true
+    })
+  ]
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
