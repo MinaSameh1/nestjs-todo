@@ -29,5 +29,8 @@ $ npm run db:dev:restart
 [Nestjs AccessToken and RefreshToken](https://github.com/vladwulf/nestjs-jwts)
 
 [Nestjs and prisma official docs](https://docs.nestjs.com/recipes/prisma)
+
+[Structure Used](https://github.com/CatsMiaow/node-nestjs-structure/blob/master/src/config/configuration.ts)
+
 ## License
 [MIT licensed](LICENSE).
