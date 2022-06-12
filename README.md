@@ -1,9 +1,8 @@
 ## Description
 
-A Project created while learning nestjs
+A simple Project created while learning nestjs, class-validator, and prisma.
 
 ## Installation
-
 ```bash
 $ npm install
 ```
@@ -19,21 +18,16 @@ $ npm run start:dev
 
 # production mode
 $ npm run start:prod
+
+# Create the db and run docker container, and run prisma migrate deploy
+$ npm run db:dev:restart
 ```
 
-## Test
+## Resources
+[Nestjs REST Api](https://www.youtube.com/watch?v=GHTA143_b-s)
 
-```bash
-# unit tests
-$ npm run test
+[Nestjs AccessToken and RefreshToken](https://github.com/vladwulf/nestjs-jwts)
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
+[Nestjs and prisma official docs](https://docs.nestjs.com/recipes/prisma)
 ## License
-
 [MIT licensed](LICENSE).
