@@ -19,7 +19,8 @@ import { AccessTokenGuard } from './common/guards';
       isGlobal: true
     })
   ],
-  providers: [AppService, 
+  providers: [
+    AppService, 
     {
       provide: APP_GUARD,
       useClass: AccessTokenGuard,
