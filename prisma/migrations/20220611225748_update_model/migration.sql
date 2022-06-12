@@ -1,0 +1,1 @@
+-- AlterTableALTERTABLE"users"ADDCOLUMN"hashedRefreshToken"TEXT;

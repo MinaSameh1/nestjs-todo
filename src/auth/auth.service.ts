@@ -1,10 +1,11 @@
-import { ForbiddenException, Injectable } from '@nestjs/common'
+import { ForbiddenException, HttpStatus, Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/modules/prisma/prisma.service'
 import * as argon from 'argon2'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime'
 import { AuthCreateDto, AuthInputDto } from './dto'
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
+import { jwtPayload, Tokens } from './types'
 
 @Injectable()
 export class AuthService {
@@ -33,21 +34,6 @@ export class AuthService {
     */
   }
 
-  async login(input: AuthInputDto) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        email: input.email,
-      }
-    })
-    if (!user) throw new ForbiddenException('Wrong Credentials')
-    const passMatch = await argon.verify(user.pass, input.pass)
-    if (!passMatch) throw new ForbiddenException('Wrong Credentials')
-
-    // Remove the pass from object.
-    delete user.pass
-    return await this.signToken(user.id, user.email)
-  }
-
   async signUp(input: AuthCreateDto) {
     try {
       input.pass = await argon.hash(input.pass)
@@ -65,7 +51,8 @@ export class AuthService {
       })
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') { // Duplicate field
+        if (error.code === 'P2002') {
+          // Duplicate field
           throw new ForbiddenException('Email or Username taken')
         }
       }
@@ -73,23 +60,82 @@ export class AuthService {
     }
   }
 
-  async signToken(userId: number, email: string): 
-  Promise<{ accessToken: string, refreshToken: string }> {
-    const accessToken = await this.jwt.signAsync({
-      id: userId,
-      email
-    }, {
-      expiresIn: '15m',
-      secret: this.config.get('JWT_SECRET')
+  async login(input: AuthInputDto) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email: input.email
+      }
     })
+    if (!user) throw new ForbiddenException('Wrong Credentials')
+    const passMatch = await argon.verify(user.pass, input.pass)
+    if (!passMatch) throw new ForbiddenException('Wrong Credentials')
 
-    const refreshToken = await this.jwt.signAsync({
+
+    const tokens = await this.signTokens(user.id, user.email)
+    this.updateRefreshToken(user.id, tokens.refreshToken)
+    return tokens
+  }
+
+  async logout(userId: number) {
+    return await this.prisma.user.updateMany({
+      where: {
+        id: userId,
+        hashedRefreshToken: {
+          not: null
+        }
+      },
+      data: {
+        hashedRefreshToken: null
+      }
+    })
+  }
+
+  async refreshTokens(userId: number, rt: string): Promise<Tokens> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: userId
+      }
+    })
+    if (!user || !user.hashedRefreshToken)
+      throw new ForbiddenException('Access Denied')
+
+    const refreshTokenMatch = await argon.verify(user.hashedRefreshToken, rt)
+    if (!refreshTokenMatch) throw new ForbiddenException('Access Denied')
+
+    const tokens = await this.signTokens(user.id, user.email)
+    await this.updateRefreshToken(user.id, tokens.refreshToken)
+
+    return tokens
+  }
+
+  async updateRefreshToken(userId: number, refreshToken: string): Promise<void> {
+    const hashedRefreshToken = await argon.hash(refreshToken)
+    await this.prisma.user.update({
+      where: {
+        id: userId
+      },
+      data: {
+        hashedRefreshToken: hashedRefreshToken
+      }
+    })
+  }
+
+  async signTokens(userId: number, email: string): Promise<Tokens> {
+    const payload: jwtPayload = {
       id: userId,
       email
-    }, {
-      expiresIn: '30d',
-      secret: this.config.get('JWT_SECRET')
-    })
+    }
+
+    const [accessToken, refreshToken] = await Promise.all([
+      this.jwt.signAsync(payload, {
+        expiresIn: '15m',
+        secret: this.config.get('JWT_SECRET')
+      }),
+      this.jwt.signAsync(payload, {
+        expiresIn: '30d',
+        secret: this.config.get('JWT_SECRET')
+      })
+    ])
 
     return {
       accessToken: accessToken,

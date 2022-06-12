@@ -18,6 +18,8 @@ model User {
   firstName String
   lastName  String
 
+  hashedRefreshToken String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   ToDo      ToDo[]
