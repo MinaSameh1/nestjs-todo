@@ -30,7 +30,7 @@ $ npm run db:dev:restart
 
 [Nestjs and prisma official docs](https://docs.nestjs.com/recipes/prisma)
 
-[Structure Used](https://github.com/CatsMiaow/node-nestjs-structure/blob/master/src/config/configuration.ts)
+[Structure Used](https://github.com/CatsMiaow/node-nestjs-structure)
 
 ## License
 [MIT licensed](LICENSE).
