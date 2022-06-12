@@ -1,11 +1,11 @@
-import { Injectable } from "@nestjs/common"
-import { getColorEnumValue } from "src/common/utils/getEnumValue.util";
-import { PrismaService } from "../prisma/prisma.service";
+import { Injectable } from '@nestjs/common'
+import { getColorEnumValue } from 'src/common/utils/getEnumValue.util'
+import { PrismaService } from '../prisma/prisma.service'
 import { ToDoDTO } from './dto'
 
 @Injectable()
 export class ToDoService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   getTodo(userId: number) {
     return this.prisma.toDo.findMany({
@@ -17,7 +17,7 @@ export class ToDoService {
 
   updateToDo(input: ToDoDTO, toDoId: number) {
     return this.prisma.toDo.update({
-      data: input, 
+      data: input,
       where: {
         id: toDoId
       }

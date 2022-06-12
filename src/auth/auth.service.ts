@@ -70,7 +70,6 @@ export class AuthService {
     const passMatch = await argon.verify(user.pass, input.pass)
     if (!passMatch) throw new ForbiddenException('Wrong Credentials')
 
-
     const tokens = await this.signTokens(user.id, user.email)
     this.updateRefreshToken(user.id, tokens.refreshToken)
     return tokens
@@ -108,7 +107,10 @@ export class AuthService {
     return tokens
   }
 
-  async updateRefreshToken(userId: number, refreshToken: string): Promise<void> {
+  async updateRefreshToken(
+    userId: number,
+    refreshToken: string
+  ): Promise<void> {
     const hashedRefreshToken = await argon.hash(refreshToken)
     await this.prisma.user.update({
       where: {

@@ -32,10 +32,10 @@ export class AuthController {
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   logout(@GetCurrentUserId() userId: number) {
-    if(this.authService.logout(userId)) {
+    if (this.authService.logout(userId)) {
       return {
-        message: "success",
-        "error": false
+        message: 'success',
+        error: false
       }
     }
   }
@@ -45,9 +45,6 @@ export class AuthController {
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   refreshTokens(@GetCurrentUser() user: jwtPayload_refresh) {
-    return this.authService.refreshTokens(
-      user.id,
-      user.refreshToken
-    )
+    return this.authService.refreshTokens(user.id, user.refreshToken)
   }
 }

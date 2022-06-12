@@ -29,7 +29,6 @@ export class AuthInputDto {
   @IsNotEmpty()
   email: string
 
-
   @IsString()
   @IsNotEmpty()
   @Length(6, 16)

@@ -1,4 +1,14 @@
-import { IsBoolean, IsDate, IsEmpty, IsEnum, IsNotEmpty, IsNumber, IsOptional, isString, IsString } from 'class-validator'
+import {
+  IsBoolean,
+  IsDate,
+  IsEmpty,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  isString,
+  IsString
+} from 'class-validator'
 import { color } from '../types'
 
 export class ToDoDTO {

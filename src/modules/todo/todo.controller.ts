@@ -1,11 +1,21 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put } from "@nestjs/common";
-import { GetCurrentUserId } from "src/common/decorators";
-import { ToDoService } from "./todo.service";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Put
+} from '@nestjs/common'
+import { GetCurrentUserId } from 'src/common/decorators'
+import { ToDoService } from './todo.service'
 import { ToDoDTO } from './dto'
 
 @Controller('todo')
 export class ToDoController {
-  constructor(private todoService: ToDoService) { }
+  constructor(private todoService: ToDoService) {}
 
   @Get()
   async getTodos(@GetCurrentUserId() userId: number) {
@@ -18,10 +28,7 @@ export class ToDoController {
   }
 
   @Post()
-  async createTodo(
-    @GetCurrentUserId() userId: number,
-    @Body() input: ToDoDTO
-  ) {
+  async createTodo(@GetCurrentUserId() userId: number, @Body() input: ToDoDTO) {
     return await this.todoService.createToDo(input, userId)
   }
 
