@@ -3,11 +3,8 @@ import { Reflector } from '@nestjs/core'
 import { AuthGuard } from '@nestjs/passport'
 
 export class AccessTokenGuard extends AuthGuard('jwt') {
-  private reflector
-
-  constructor(reflector: Reflector) {
+  constructor(private reflector: Reflector) {
     super()
-    this.reflector = new Reflector()
   }
 
   canActivate(context: ExecutionContext) {
