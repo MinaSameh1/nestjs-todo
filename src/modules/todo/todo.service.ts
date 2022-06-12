@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common"
+import { getColorEnumValue } from "src/common/utils/getEnumValue.util";
 import { PrismaService } from "../prisma/prisma.service";
-import { ToDoCreateDTO } from './dto'
+import { ToDoDTO } from './dto'
 
 @Injectable()
 export class ToDoService {
@@ -14,10 +15,20 @@ export class ToDoService {
     })
   }
 
-  createToDo(input: ToDoCreateDTO, userId: number) {
+  updateToDo(input: ToDoDTO, toDoId: number) {
+    return this.prisma.toDo.update({
+      data: input, 
+      where: {
+        id: toDoId
+      }
+    })
+  }
+
+  createToDo(input: ToDoDTO, userId: number) {
     return this.prisma.toDo.create({
       data: {
         ...input,
+        color: getColorEnumValue(input.color),
         userId: userId
       }
     })

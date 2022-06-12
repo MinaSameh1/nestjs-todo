@@ -1,15 +1,36 @@
-import { IsDate, IsNotEmpty, IsString } from 'class-validator'
+import { IsBoolean, IsDate, IsEmpty, IsEnum, IsNotEmpty, IsNumber, IsOptional, isString, IsString } from 'class-validator'
+import { color } from '../types'
 
-export class ToDoCreateDTO {
-  @IsNotEmpty()
+export class ToDoDTO {
   @IsString()
+  @IsNotEmpty()
   title: string
 
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   description: string
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsDate()
-  time: Date
+  startTime?: Date
+
+  @IsOptional()
+  @IsDate()
+  endTime?: Date
+
+  @IsEnum(color)
+  @IsNotEmpty()
+  color: color
+
+  @IsOptional()
+  @IsBoolean()
+  isCompleted: boolean = false
+
+  @IsOptional()
+  @IsNumber()
+  remindTime?: number
+
+  @IsOptional()
+  @IsString()
+  repeat?: string
 }

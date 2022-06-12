@@ -1,30 +1,32 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put } from "@nestjs/common";
 import { GetCurrentUserId } from "src/common/decorators";
 import { ToDoService } from "./todo.service";
-import { ToDoCreateDTO } from './dto'
+import { ToDoDTO } from './dto'
 
 @Controller('todo')
 export class ToDoController {
   constructor(private todoService: ToDoService) { }
 
   @Get()
-  @HttpCode(HttpStatus.OK)
   async getTodos(@GetCurrentUserId() userId: number) {
-    return this.getTodos(userId)
+    return await this.todoService.getTodo(userId)
+  }
+
+  @Put(':toDoId')
+  async updateToDo(@Body() input: ToDoDTO, @Param('toDoId') toDoId: string) {
+    return await this.todoService.updateToDo(input, Number.parseInt(toDoId))
   }
 
   @Post()
-  @HttpCode(HttpStatus.CREATED)
   async createTodo(
     @GetCurrentUserId() userId: number,
-    @Body() input: ToDoCreateDTO
+    @Body() input: ToDoDTO
   ) {
     return await this.todoService.createToDo(input, userId)
   }
 
   @Delete(':toDoId')
-  @HttpCode(HttpStatus.OK)
-  async deleteTodo(@Param('toDoId') toDoId) {
-    return await this.todoService.deleteToDo(toDoId)
+  async deleteTodo(@Param('toDoId') toDoId: string) {
+    return await this.todoService.deleteToDo(Number.parseInt(toDoId))
   }
 }
