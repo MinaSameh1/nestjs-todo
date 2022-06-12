@@ -33,6 +33,8 @@ model ToDo {
   title       String
   description String
 
+  time DateTime
+
   userId Int
   User   User @relation(fields: [userId], references: [id])
 
