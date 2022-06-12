@@ -33,9 +33,14 @@ model ToDo {
   title       String
   description String
 
-  time DateTime
-
+  startTime DateTime @default(now())
+  endTime DateTime?
+  color Int @default(0)
+  isCompleted Boolean @default(false)
+  remindTime Int?
+  repeat String? @default("")
   userId Int
+
   User   User @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
