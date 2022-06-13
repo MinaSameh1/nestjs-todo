@@ -11,7 +11,7 @@ export class PrismaService
     super({
       datasources: {
         db: {
-          url: config.get('DATABASE_URL')
+          url: process.env['NODE_ENV'] === 'development' ? config.get('DATABASE_URL_DEV') : config.get('DATABASE_URL')
         }
       }
     })
