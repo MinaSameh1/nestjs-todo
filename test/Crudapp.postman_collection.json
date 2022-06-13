@@ -100,6 +100,21 @@
 				},
 				{
 					"name": "Refresh token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = JSON.parse(responseBody);",
+									"",
+									"pm.collectionVariables.set(\"accessToken\", jsonData.accessToken);",
+									"",
+									"pm.collectionVariables.set(\"refreshToken\",jsonData.refreshToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -116,8 +131,7 @@
 							{
 								"key": "x-refresh",
 								"value": "{{refreshToken}}",
-								"type": "default",
-								"disabled": true
+								"type": "default"
 							}
 						],
 						"url": {
@@ -250,6 +264,34 @@
 								"api",
 								"todo",
 								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch Todo",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"isCompleted\": true,\n    \"endTime\": \"2022-06-22T13:23:13.517Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{endpoint}}/api/todo/1",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"api",
+								"todo",
+								"1"
 							]
 						}
 					},
