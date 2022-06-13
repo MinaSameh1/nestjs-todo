@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { AuthCreateDto, AuthInputDto } from './dto'
-import { AccessTokenGuard, RefreshTokenGuard } from 'src/common/guards'
+import { RefreshTokenGuard } from 'src/common/guards'
 import { GetCurrentUser, GetCurrentUserId, Public } from 'src/common/decorators'
 import { jwtPayload_refresh } from './types'
 
@@ -28,7 +28,6 @@ export class AuthController {
     return this.authService.login(body)
   }
 
-  @UseGuards(AccessTokenGuard)
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   logout(@GetCurrentUserId() userId: number) {
