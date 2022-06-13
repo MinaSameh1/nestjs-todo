@@ -22,15 +22,15 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --watch --no-cache --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^2.1.0",
-    "@nestjs/core": "^7.5.5",
+    "@nestjs/core": "^8.4.6",
     "@nestjs/jwt": "^8.0.1",
     "@nestjs/passport": "^8.2.1",
-    "@nestjs/platform-express": "^7.5.5",
+    "@nestjs/platform-express": "^8.4.6",
     "@prisma/client": "^3.15.1",
     "argon2": "^0.28.5",
     "class-transformer": "^0.5.1",
@@ -44,7 +44,7 @@
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
     "@nestjs/schematics": "^8.0.0",
-    "@nestjs/testing": "^7.5.5",
+    "@nestjs/testing": "^8.4.6",
     "@types/express": "^4.17.13",
     "@types/jest": "27.4.1",
     "@types/node": "^16.0.0",
