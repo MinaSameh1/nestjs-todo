@@ -2,20 +2,19 @@ import {
   IsBoolean,
   IsDateString,
   IsEnum,
-  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString
 } from 'class-validator'
 import { color, ToDo } from '../types'
 
-export class ToDoDTO implements ToDo {
+export class ToDoPatchDTO implements ToDo {
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   title: string
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   description: string
 
   @IsOptional()
@@ -27,7 +26,7 @@ export class ToDoDTO implements ToDo {
   endTime?: Date
 
   @IsEnum(color)
-  @IsNotEmpty()
+  @IsOptional()
   color: color
 
   @IsOptional()
