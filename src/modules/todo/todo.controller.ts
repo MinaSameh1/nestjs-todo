@@ -40,7 +40,7 @@ export class ToDoController {
   }
 
   @Post()
-  async createTodo(@GetCurrentUserId() userId: number, @Body() input: ToDoDTO) {
+  async createTodo(@GetCurrentUserId() userId: number, @Body(new ParseStartAndEndTime()) input: ToDoDTO) {
     return await this.todoService.createToDo(input, userId)
   }
 
