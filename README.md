@@ -2,6 +2,9 @@
 
 A simple Project created while learning nestjs, class-validator, and prisma.
 
+It is hosted on heroku so give it a second to come online. https://nestjs-tst-todo.herokuapp.com/    
+There is a [postman file](https://github.com/MinaSameh1/nestjs-todo/blob/main/test/Crudapp.postman_collection.json) with the endpoints.
+
 ## Installation
 ```bash
 $ npm install
