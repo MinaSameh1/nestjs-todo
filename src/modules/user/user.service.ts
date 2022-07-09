@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
+import { UserInputDTO } from './dto'
 
 @Injectable()
 export class UserService {
@@ -14,5 +15,14 @@ export class UserService {
     delete user.pass
     delete user.hashedRefreshToken
     return user
+  }
+
+  update(id: number, input: UserInputDTO) {
+    return this.prisma.user.update({
+      data: input,
+      where: {
+        id: id
+      }
+    })
   }
 }
